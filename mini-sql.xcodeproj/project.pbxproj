@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9D69257E23FACE4400FC78CC /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D69257D23FACE4400FC78CC /* parser.cpp */; };
 		9D74E17823FABED3000C7FA2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D74E17723FABED3000C7FA2 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,8 +24,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9D69257C23FACCFF00FC78CC /* grammar.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = grammar.md; sourceTree = "<group>"; };
+		9D69257D23FACE4400FC78CC /* parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
+		9D69258123FAD45F00FC78CC /* parser_tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = parser_tests; sourceTree = "<group>"; };
+		9D69258223FB283D00FC78CC /* stress_test */ = {isa = PBXFileReference; lastKnownFileType = text; path = stress_test; sourceTree = "<group>"; };
 		9D74E17423FABED2000C7FA2 /* mini-sql */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "mini-sql"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9D74E17723FABED3000C7FA2 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		9D74E17E23FABEDC000C7FA2 /* db.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = db.h; sourceTree = "<group>"; };
+		9D74E17F23FAC0AB000C7FA2 /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
+		9D74E18023FAC1FA000C7FA2 /* engine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = engine.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +46,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9D69257F23FAD44500FC78CC /* tests */ = {
+			isa = PBXGroup;
+			children = (
+				9D69258023FAD44A00FC78CC /* source */,
+			);
+			path = tests;
+			sourceTree = "<group>";
+		};
+		9D69258023FAD44A00FC78CC /* source */ = {
+			isa = PBXGroup;
+			children = (
+				9D69258123FAD45F00FC78CC /* parser_tests */,
+				9D69258223FB283D00FC78CC /* stress_test */,
+			);
+			path = source;
+			sourceTree = "<group>";
+		};
 		9D74E16B23FABED2000C7FA2 = {
 			isa = PBXGroup;
 			children = (
@@ -57,7 +82,13 @@
 		9D74E17623FABED3000C7FA2 /* mini-sql */ = {
 			isa = PBXGroup;
 			children = (
+				9D69257F23FAD44500FC78CC /* tests */,
 				9D74E17723FABED3000C7FA2 /* main.cpp */,
+				9D74E17E23FABEDC000C7FA2 /* db.h */,
+				9D74E17F23FAC0AB000C7FA2 /* parser.h */,
+				9D74E18023FAC1FA000C7FA2 /* engine.h */,
+				9D69257C23FACCFF00FC78CC /* grammar.md */,
+				9D69257D23FACE4400FC78CC /* parser.cpp */,
 			);
 			path = "mini-sql";
 			sourceTree = "<group>";
@@ -119,6 +150,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D69257E23FACE4400FC78CC /* parser.cpp in Sources */,
 				9D74E17823FABED3000C7FA2 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
