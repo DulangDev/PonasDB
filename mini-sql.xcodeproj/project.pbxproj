@@ -33,6 +33,9 @@
 		9D74E17E23FABEDC000C7FA2 /* db.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = db.h; sourceTree = "<group>"; };
 		9D74E17F23FAC0AB000C7FA2 /* parser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = parser.h; sourceTree = "<group>"; };
 		9D74E18023FAC1FA000C7FA2 /* engine.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = engine.h; sourceTree = "<group>"; };
+		9D76668C23FFEC21007B8922 /* server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = server.h; sourceTree = "<group>"; };
+		9D76668D23FFF5A4007B8922 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
+		9D76668F23FFF690007B8922 /* ss.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ss.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +85,7 @@
 		9D74E17623FABED3000C7FA2 /* mini-sql */ = {
 			isa = PBXGroup;
 			children = (
+				9D76668E23FFF65F007B8922 /* static */,
 				9D69257F23FAD44500FC78CC /* tests */,
 				9D74E17723FABED3000C7FA2 /* main.cpp */,
 				9D74E17E23FABEDC000C7FA2 /* db.h */,
@@ -89,8 +93,18 @@
 				9D74E18023FAC1FA000C7FA2 /* engine.h */,
 				9D69257C23FACCFF00FC78CC /* grammar.md */,
 				9D69257D23FACE4400FC78CC /* parser.cpp */,
+				9D76668C23FFEC21007B8922 /* server.h */,
 			);
 			path = "mini-sql";
+			sourceTree = "<group>";
+		};
+		9D76668E23FFF65F007B8922 /* static */ = {
+			isa = PBXGroup;
+			children = (
+				9D76668D23FFF5A4007B8922 /* index.html */,
+				9D76668F23FFF690007B8922 /* ss.js */,
+			);
+			path = static;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

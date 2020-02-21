@@ -31,14 +31,22 @@ void test_parser(){
 int main(int argc, const char * argv[]) {
     // insert code here...
     engine eng;
-#define run_tests 1
+#define run_tests 0
 #if run_tests
     test_parser();
     FILE * in = fopen("tests/source/stress_test", "r");
     FILE * out = fopen("log.out", "w");
     engine().startEngine(fileno(in), fileno(out));
 #endif
-    eng.startEngine(0, 1);
+    Server serv(9000);
+    do{
+        typename Server::Connection c = serv.connect();
+        std::string res = eng.serialize_evaluation(c.get_query());
+        c.write_answer(res.c_str());
+        
+    } while(1);
+    
+    //eng.startEngine(0, 1);
     
     
     return 0;

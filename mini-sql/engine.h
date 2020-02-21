@@ -10,6 +10,7 @@
 #define engine_h
 #include "db.h"
 #include "parser.h"
+#include "server.h"
 
 class engine {
     DB database;
@@ -105,8 +106,9 @@ public:
         std::vector<int> indexes = evaluate_query(q);
         std::string result = "[\n";
         for( auto i: indexes ){
-            result += database.serialize(i);
+            result += database.serialize(i) + ",";
         }
+        result.erase(result.length() - 1, 1);
         return result + "]";
     }
     

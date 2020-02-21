@@ -42,9 +42,11 @@ class DB{
             data.push_back(entry);
         }
         std::string serialize(int pos) const {
-            std::string result = std::string(name) + " = ";
+            std::string result = "\""+std::string(name)+"\":";
             if(type == str_entry){
+                result += "\"";
                 result += data[pos].str;
+                result += "\"";
             } else {
                 result += std::to_string(data[pos].number);
             }
@@ -76,6 +78,7 @@ public:
         for( const row& r: data ){
             result += r.serialize(pos);
         }
+        result.erase(result.length() - 2, 2);
         return result + " }\n";
     };
     
