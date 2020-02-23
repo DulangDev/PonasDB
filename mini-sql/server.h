@@ -51,8 +51,9 @@ class Server{
             for(char * rdr = rdbuf; *rdr != 0; ++rdr){
                 if( *rdr == '%' ){
                     rdr += 2;
-                    char numbuf [2];
+                    char numbuf [3];
                     strncpy(numbuf, rdr-1, 2);
+                    numbuf[2] = 0;
                     int res = (int)strtol(numbuf, 0, 16);
                     switch (res) {
                         case 34:
@@ -141,7 +142,6 @@ class Server{
             rdbuf[ bread ] = 0;
             //printf( "Got %d, %s\n", read, rdbuf );
         }
-        printf( "Got command '%s'\n", rdbuf );
         char type[10];
         char path [2048];
         sscanf(rdbuf, "%s%s", type, path);
@@ -158,7 +158,6 @@ class Server{
             char bodybuf [100];
             char * ext = strchr(strbuf, '.') + 1;
             const char * mime = "text/html";
-            printf("extension %s\n\n", ext);
             if(strcmp(ext, "js")==0){
                 mime = "application/javascript";
             }

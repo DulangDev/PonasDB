@@ -10,6 +10,7 @@
 #define parser_h
 #include <vector>
 #include <iostream>
+#include "json.h"
 #warning names of rows cannot contain and, or, not
 
 
@@ -22,6 +23,14 @@ static const char * lexems [] = {
     "not",
     "(",
     ")",
+    "{",
+    "}",
+    ",",
+    ":",
+    "[",
+    "]",
+    "true",
+    "false"
 };
 class Parser{
     
@@ -94,7 +103,8 @@ public:
     };
     
     static void delete_node(astnode* node){
-        free(node->val);
+        if(node->val)
+            free(node->val);
         for(auto child: node->children){
             delete_node(child);
         }
@@ -110,6 +120,14 @@ public:
         not_lex,
         open_bracket,
         close_bracket,
+        obrace,
+        cbrace,
+        comma,
+        colon,
+        arr_op,
+        arr_cl,
+        _true,
+        _false,
         strlit,
         numlit,
         name,
@@ -140,7 +158,7 @@ public:
     
     static lexem get_lexem(const char * q){
         const char * reader = q;
-        while( *reader == ' ' ){
+        while( *reader == ' ' or *reader == '\n'){
             reader ++;
         }
         if( *reader == '"' ){
@@ -188,7 +206,8 @@ public:
         //keyword is not being parsed here
         std::vector<lexem> ls;
         const char * rdr = query;
-        while( rdr < query + strlen(query) ){
+        int l = strlen(query);
+        while( rdr < query + l ){
             lexem l = get_lexem(rdr);
             ls.push_back(l);
             rdr+= l.size;
@@ -198,10 +217,25 @@ public:
     
     typedef std::vector<lexem>::iterator lwalker;
     
-    static astnode * parse_logor(lwalker & walker);
-    static astnode * parse_logand(lwalker & walker);
-    static astnode * parse_lognot(lwalker & walker);
-    static astnode * parse_expr(lwalker & walker);
+    
+    
+    static json parse_json(const char * json_string){
+        std::vector<lexem> ls = split_to_lexems(json_string);
+        auto iter = ls.begin();
+        return parse_js_anything(iter);
+    }
+private:
+    static json parse_js_literal        (lwalker & walker);
+    static json parse_js_array          (lwalker & walker);
+    static json parse_js_dict           (lwalker & walker);
+    static json parse_js_anything       (lwalker & walker);
+    static json::prop_entry parse_entry        (lwalker & walker);
+    static astnode * parse_logor        (lwalker & walker);
+    static astnode * parse_logand       (lwalker & walker);
+    static astnode * parse_lognot       (lwalker & walker);
+    static astnode * parse_expr         (lwalker & walker);
+public:
+    
     
     
     static astnode * parse_query(const char * query){

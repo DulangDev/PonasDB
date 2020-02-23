@@ -89,3 +89,90 @@ Parser::astnode * Parser::parse_lognot(lwalker &walker){
     asttype comptype = (asttype)(EQUALS + ((int)comp.type - (int)equals));
     return create_node(comptype, 2, _left, _right);
 }
+
+json Parser::parse_js_literal        (lwalker & walker){
+    lexem & l = *walker;
+    walker++;
+    if(l.type == numlit){
+        return json( *(long*)l.val );
+    }
+    if(l.type == strlit){
+        return json((const char*)l.val);
+    }
+    if(l.type == _true){
+        return json(1.0);
+    }
+    if(l.type == _false){
+        return json(0.0);
+    }
+    return json::undefined;
+}
+json Parser::parse_js_array          (lwalker & walker){
+    //assume that we stand at [
+    walker++;
+    json arr = json::Array();
+    json j = parse_js_anything(walker);
+    arr.push(j);
+    while( (*walker).type != arr_cl ){
+        if((*walker).type != comma){
+            return json::undefined;
+        }
+        walker++;
+        json elem = parse_js_anything(walker);
+        arr.push(elem);
+    }
+    walker++;
+    return arr;
+}
+json::prop_entry Parser::parse_entry(lwalker & walker){
+    Parser::lexem & l = *walker;
+    if(l.type != Parser::strlit){
+        return json::prop_entry();
+    }
+    char * name = strdup((char*)l.val);
+    walker ++;
+    if( (*walker).type != Parser::colon ){
+        return json::prop_entry();
+    }
+    walker++;
+    json val = parse_js_anything(walker);
+    json::prop_entry entry;
+    entry.name = name;
+    entry.val = val;
+    return entry;
+    
+}
+json Parser::parse_js_dict           (lwalker & walker){
+    //assume that we stand at {
+    walker++;
+    json dict = json::Dict();
+    json::prop_entry entry = parse_entry(walker);
+    dict.push(entry);
+    while( (*walker).type != cbrace ){
+        if((*walker).type != comma){
+            return json::undefined;
+        }
+        walker++;;
+        dict.push(parse_entry(walker));
+        
+    }
+    walker++;
+    return dict;
+}
+json Parser::parse_js_anything       (lwalker & walker){
+    lexem & l = *walker;
+    switch (l.type) {
+        case numlit:
+        case strlit:
+        case _true:
+        case _false:
+            return parse_js_literal(walker);
+        case arr_op:
+            return parse_js_array(walker);
+        case obrace:
+            return parse_js_dict(walker);
+        default:
+            return json::undefined;
+            break;
+    }
+}

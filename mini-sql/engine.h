@@ -12,6 +12,7 @@
 #include "parser.h"
 #include "server.h"
 
+
 class engine {
     DB database;
     // not to perform strcmp each time as it will have complexity O(m*n), where n is amount of records in db and m is complexity of the query
@@ -90,6 +91,9 @@ class engine {
     }
     
 public:
+    engine(const DB & db){
+        database = db;
+    }
     std::vector<int> evaluate_query(const char * q){
         std::vector<int> result;
         Parser::astnode * expr = Parser::parse_query(q);

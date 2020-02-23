@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9D69257E23FACE4400FC78CC /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D69257D23FACE4400FC78CC /* parser.cpp */; };
 		9D74E17823FABED3000C7FA2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D74E17723FABED3000C7FA2 /* main.cpp */; };
+		9D7666922402AFD6007B8922 /* json-imp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7666912402AFD6007B8922 /* json-imp.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -36,6 +37,10 @@
 		9D76668C23FFEC21007B8922 /* server.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = server.h; sourceTree = "<group>"; };
 		9D76668D23FFF5A4007B8922 /* index.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		9D76668F23FFF690007B8922 /* ss.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = ss.js; sourceTree = "<group>"; };
+		9D7666902402AA37007B8922 /* json.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = json.h; sourceTree = "<group>"; };
+		9D7666912402AFD6007B8922 /* json-imp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "json-imp.cpp"; sourceTree = "<group>"; };
+		9D7666932402BE2E007B8922 /* json */ = {isa = PBXFileReference; lastKnownFileType = text; path = json; sourceTree = "<group>"; };
+		9D7666942402CB63007B8922 /* json.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +67,8 @@
 			children = (
 				9D69258123FAD45F00FC78CC /* parser_tests */,
 				9D69258223FB283D00FC78CC /* stress_test */,
+				9D7666932402BE2E007B8922 /* json */,
+				9D7666942402CB63007B8922 /* json.txt */,
 			);
 			path = source;
 			sourceTree = "<group>";
@@ -94,6 +101,8 @@
 				9D69257C23FACCFF00FC78CC /* grammar.md */,
 				9D69257D23FACE4400FC78CC /* parser.cpp */,
 				9D76668C23FFEC21007B8922 /* server.h */,
+				9D7666902402AA37007B8922 /* json.h */,
+				9D7666912402AFD6007B8922 /* json-imp.cpp */,
 			);
 			path = "mini-sql";
 			sourceTree = "<group>";
@@ -164,6 +173,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9D7666922402AFD6007B8922 /* json-imp.cpp in Sources */,
 				9D69257E23FACE4400FC78CC /* parser.cpp in Sources */,
 				9D74E17823FABED3000C7FA2 /* main.cpp in Sources */,
 			);

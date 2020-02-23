@@ -13,7 +13,7 @@ function ponasenkov(info){
 btn.onclick = ()=>{
     fetch("/?"+editor.value).then( r=> r.json() ).then(
         (r)=>{
-            res_container.innerHTML = r.map(ponasenkov).reduce((a, v)=> a + v);
+            res_container.innerHTML = r.map(ponasenkov).reduce((a, v)=> a + v, "");
         }
     )
 }

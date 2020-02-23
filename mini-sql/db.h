@@ -11,6 +11,8 @@
 #include <vector>
 #include <cstring>
 #include <string>
+
+#include "json.h"
 class engine;
 class DB{
     friend class engine;
@@ -30,8 +32,19 @@ class DB{
             this->name = strdup(name);
             type = t;
         }
+        
+        void add_entry( const char * v ){
+            if( type == str_entry )
+                add_str_entry(v);
+        }
+        
+        void add_entry(long num){
+            if(type == num_entry){
+                add_num_entry(num);
+            }
+        }
+    private:
         void add_str_entry(const char * val){
-#warning TODO: typechecks
             data_t entry;
             entry.str = strdup(val);
             data.push_back(entry);
@@ -41,6 +54,7 @@ class DB{
             entry.number = num;
             data.push_back(entry);
         }
+    public:
         std::string serialize(int pos) const {
             std::string result = "\""+std::string(name)+"\":";
             if(type == str_entry){
@@ -57,16 +71,48 @@ class DB{
 public:
     DB(){
         //push some dummy data
-        row name("name", row::types::str_entry);
-        for(int i = 0; i < 1e5; ++i){
-            name.add_str_entry("PONASENKOV");
+       
+    }
+    
+    DB(const json & j){
+        for(int i = 0; i < j.length(); ++i){
+            const json & record= j[i];
+            //skip all non-dict entries, here we prevent exception of incorrect type and dont need to catch it
+            if( record.getType() != json::dict ){
+                continue;
+            }
+            const auto & entries = record.get_entries();
+            for( auto & entry: entries ){
+                for( auto & r: data ){
+                    if( strcmp(r.name, entry.name) == 0 ){
+                        if(entry.val.getType() == json::number){
+                            r.add_entry((double)entry.val);
+                        }
+                        if(entry.val.getType() == json::string){
+                            r.add_entry(entry.val.c_str());
+                        }
+                        goto ct;
+                    }
+                }
+                {
+                    row::types type = row::str_entry;
+                    if( entry.val.getType() == json::number ){
+                        type = row::num_entry;
+                    }
+                    row r( entry.name, type );
+                    if(entry.val.getType() == json::number){
+                        r.add_entry((double)entry.val);
+                    }
+                    if(entry.val.getType() == json::string){
+                        r.add_entry(entry.val.c_str());
+                    }
+                    data.push_back(r);
+                }
+                
+            ct:;
+            }
+        
         }
-        row telephone("telephone", row::types::num_entry);
-        for(int i = 0; i < 1e5; ++i){
-            telephone.add_num_entry(i);
-        }
-        data.push_back(name);
-        data.push_back(telephone);
     }
     
     std::vector<row>& getData() {
