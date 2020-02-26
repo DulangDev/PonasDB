@@ -5,4 +5,5 @@ select <expr>
 <expr> ::== <logand> || <logand> "or" <logand>
 <logand> ::== <lognot> || "not " <lognot>
 <lognot> ::== <symbol> { "==" || "<" || ">" } <value> || "(" <expr> ")"
+<symbol> ::== <symbol>.<string> || <name>
 

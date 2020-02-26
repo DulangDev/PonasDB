@@ -10,7 +10,10 @@
 #include "engine.h"
 #include <fstream>
 #include <string>
-
+#include "jsondb.h"
+#include "codegen.hpp"
+#include "executor.hpp"
+#include "App.h"
 
 static void test_parser(){
     FILE * f = fopen("tests/source/parser_tests", "r");
@@ -21,7 +24,14 @@ static void test_parser(){
         Parser::astnode * node = Parser::parse_query(cmdbuf);
         std::ofstream writer("test_parser_res"+std::to_string(ctr));
         writer << "TESTING PARSE QUERY INTO AST\nINPUT: "<< cmdbuf << "\nOUTPUT:\n";
-        node->print(writer, 0);
+        if(node){
+            node->print(writer, 0);
+            writer << "------------\n";
+            CodeGen::generate(node).print(writer);
+            
+        }
+        else writer << "incorrect request";
+        
         ctr++;
         writer.close();
     }
@@ -45,32 +55,19 @@ static void test_json(){
 }
 
 
+
+
 int main(int argc, const char * argv[]) {
     
 #define run_tests 0
 #if run_tests
     test_parser();
-    test_json();
+    test_execution();
     //stress_test();
 #else
-    Server serv(9000);
-    do{
-        FILE * fin = fopen("tests/source/json.txt", "r");
-        char * rdbuf = (char*)malloc(1e8);
-        int len = fread(rdbuf, 1, 1e8 - 1, fin);
-        rdbuf[len] = 0;
-        engine eng(DB(Parser::parse_json(rdbuf)));
-        typename Server::Connection c = serv.connect();
-        const char * q = c.get_query();
-        Parser::astnode* n = Parser::parse_query(q);
-        n->print(std::cout, 0);
-        std::cout << q << "\n";
-        std::string res = eng.serialize_evaluation(q);
-        c.write_answer(res.c_str());
-        
-    } while(1);
-#endif
     
+#endif
+    App().launch();
     
     //eng.startEngine(0, 1);
     

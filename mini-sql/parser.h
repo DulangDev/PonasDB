@@ -30,7 +30,9 @@ static const char * lexems [] = {
     "[",
     "]",
     "true",
-    "false"
+    "false",
+    ".",
+    "in"
 };
 class Parser{
     
@@ -44,7 +46,8 @@ public:
         SYMBOL,
         AND,
         OR,
-        NOT
+        NOT,
+        SUBSCR
     };
     struct astnode {
         asttype type;
@@ -56,7 +59,7 @@ public:
         
         void print( std::ostream& o, int offt ){
             for(int i = 0; i < offt; ++i){
-                std::cout<< " ";
+                o<< " ";
             }
             switch (type) {
                 case EQUALS:
@@ -96,11 +99,30 @@ public:
                 case NUMVAL:
                     o << *(long*)val << "\n";
                     break;
+                case SUBSCR:
+                    o<< "GET_FIELD: \n";
+                    children[0]->print(o, offt + 4);
+                    children[1]->print(o, offt + 4);
+                    break;
                 default:
                     break;
             }
         }
     };
+    
+    static json load_json_from_file(const char * fname){
+        FILE * f = fopen(fname, "r");
+        fseek(f, 0, SEEK_END);
+        size_t fsize = ftell(f);
+        rewind(f);
+        char * rdbuf = (char*)malloc(fsize + 1);
+        fread(rdbuf, 1, fsize, f);
+        rdbuf[fsize] = 0;
+        json res = parse_json(rdbuf);
+        free(rdbuf);
+        fclose(f);
+        return res;
+    }
     
     static void delete_node(astnode* node){
         if(node->val)
@@ -128,6 +150,8 @@ public:
         arr_cl,
         _true,
         _false,
+        dot,
+        kwin,
         strlit,
         numlit,
         name,
@@ -182,7 +206,7 @@ public:
             }
         }
         const char * iden_reader = reader;
-        while(isalpha(*iden_reader)){
+        while(isalpha(*iden_reader) || *iden_reader == '_'){
             iden_reader ++;
         }
         if( iden_reader > reader ){
@@ -193,7 +217,7 @@ public:
             return result;
         }
         char * num_reader;
-        long num = strtol(reader, &num_reader, 10);
+        long num = (long)strtod(reader, &num_reader);
         lexem result;
         result.type = numlit;
         result.val = malloc(8);
@@ -206,12 +230,15 @@ public:
         //keyword is not being parsed here
         std::vector<lexem> ls;
         const char * rdr = query;
-        int l = strlen(query);
-        while( rdr < query + l ){
-            lexem l = get_lexem(rdr);
-            ls.push_back(l);
-            rdr+= l.size;
+        if(rdr){
+            size_t l = strlen(query);
+            while( rdr < query + l ){
+                lexem l = get_lexem(rdr);
+                ls.push_back(l);
+                rdr+= l.size;
+            }
         }
+        
         return ls;
     }
     
@@ -233,12 +260,15 @@ private:
     static astnode * parse_logor        (lwalker & walker);
     static astnode * parse_logand       (lwalker & walker);
     static astnode * parse_lognot       (lwalker & walker);
+    static astnode * parse_symbol       (lwalker & walker);
     static astnode * parse_expr         (lwalker & walker);
 public:
     
     
     
     static astnode * parse_query(const char * query){
+        if(!query)
+            return 0;
         std::vector<lexem> lstream = split_to_lexems(query);
         auto iter = lstream.begin();
         return parse_expr(iter);

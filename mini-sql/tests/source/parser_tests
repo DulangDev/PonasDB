@@ -1,1 +1,1 @@
-name == "PONASENKOV" or  (telephone < 1)
+name.first.ascii == "PONASENKOV" and not (tele > 0)

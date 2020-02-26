@@ -7,6 +7,7 @@
 //
 
 #include "parser.h"
+#define jsondb 1
 #include <cstdarg>
 
 Parser::astnode * create_node_va(Parser::asttype type, int children, va_list va){
@@ -35,6 +36,8 @@ Parser::astnode * Parser::parse_expr(lwalker &walker){
     if( (*walker).type == or_lex ){
         walker ++;
         astnode * right = parse_lognot(walker);
+        if(! right)
+            return 0;
         return create_node(Parser::asttype::OR, 2, left, right);
     }
     return left;
@@ -63,31 +66,59 @@ Parser::astnode * Parser::parse_lognot(lwalker &walker){
     if((*walker).type == open_bracket){
         walker++;
         astnode * subexp = parse_expr(walker);
-#warning syntax check for closing )
-        walker++;
+        if( (*walker).type != close_bracket ){
+            return 0;
+        }
         return subexp;
     }
     lexem left = *walker;
     if(left.type != name){
-#warning handle error
+        return 0;
     }
-    astnode * _left = create_node(SYMBOL, 0);
-    _left->val = left.val;
-    walker++;
+    astnode * _left = parse_symbol(walker);
+#if jsondb
+    if(1){
+        //load global
+        astnode * gl = create_node(SYMBOL, 0);
+        gl->val = strdup("this");
+        _left = create_node(SUBSCR, 2, gl, _left);
+    }
+#endif
     lexem comp = * walker;
     walker++;
     lexem right = * walker;
     walker ++;
-    asttype rtype;
+    asttype rtype = STRVAL;
     if( right.type == strlit )
         rtype = STRVAL;
     if( right.type == numlit )
         rtype = NUMVAL;
     astnode * _right = create_node(rtype, 0);
     _right->val = right.val;
-#warning handle error if comp is not actualyy comparison
     asttype comptype = (asttype)(EQUALS + ((int)comp.type - (int)equals));
+    if( comptype != EQUALS && comptype != GREATER && comptype != LESS ){
+        return 0;
+    }
     return create_node(comptype, 2, _left, _right);
+}
+
+Parser::astnode * Parser::parse_symbol       (lwalker & walker){
+    lexem & l = *walker;
+    if( l.type != name ){
+        return 0;
+    }
+    astnode * _left = create_node(SYMBOL, 0);
+    _left->val = l.val;
+    walker++;
+    l = *walker;
+    if( l.type == dot ){
+        walker ++;
+        astnode * right = parse_symbol(walker);
+        if( !right )
+            return 0;
+        return create_node(SUBSCR, 2, _left, right);
+    }
+    return _left;
 }
 
 json Parser::parse_js_literal        (lwalker & walker){

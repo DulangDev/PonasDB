@@ -10,6 +10,8 @@
 		9D69257E23FACE4400FC78CC /* parser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D69257D23FACE4400FC78CC /* parser.cpp */; };
 		9D74E17823FABED3000C7FA2 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D74E17723FABED3000C7FA2 /* main.cpp */; };
 		9D7666922402AFD6007B8922 /* json-imp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7666912402AFD6007B8922 /* json-imp.cpp */; };
+		9D7666992405A58E007B8922 /* codegen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7666972405A58E007B8922 /* codegen.cpp */; };
+		9D76669D2405B9F1007B8922 /* executor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D76669B2405B9F1007B8922 /* executor.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +27,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9D64FDBA2405E67500266C66 /* App.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		9D69257C23FACCFF00FC78CC /* grammar.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = grammar.md; sourceTree = "<group>"; };
 		9D69257D23FACE4400FC78CC /* parser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = parser.cpp; sourceTree = "<group>"; };
 		9D69258123FAD45F00FC78CC /* parser_tests */ = {isa = PBXFileReference; lastKnownFileType = text; path = parser_tests; sourceTree = "<group>"; };
@@ -41,6 +44,12 @@
 		9D7666912402AFD6007B8922 /* json-imp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = "json-imp.cpp"; sourceTree = "<group>"; };
 		9D7666932402BE2E007B8922 /* json */ = {isa = PBXFileReference; lastKnownFileType = text; path = json; sourceTree = "<group>"; };
 		9D7666942402CB63007B8922 /* json.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = json.txt; sourceTree = "<group>"; };
+		9D7666962405A51A007B8922 /* jsondb.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = jsondb.h; sourceTree = "<group>"; };
+		9D7666972405A58E007B8922 /* codegen.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = codegen.cpp; sourceTree = "<group>"; };
+		9D7666982405A58E007B8922 /* codegen.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = codegen.hpp; sourceTree = "<group>"; };
+		9D76669A2405B3B6007B8922 /* test_parser_res0 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_parser_res0; sourceTree = "<group>"; };
+		9D76669B2405B9F1007B8922 /* executor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = executor.cpp; sourceTree = "<group>"; };
+		9D76669C2405B9F1007B8922 /* executor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = executor.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,9 +101,13 @@
 		9D74E17623FABED3000C7FA2 /* mini-sql */ = {
 			isa = PBXGroup;
 			children = (
+				9D76669A2405B3B6007B8922 /* test_parser_res0 */,
 				9D76668E23FFF65F007B8922 /* static */,
 				9D69257F23FAD44500FC78CC /* tests */,
 				9D74E17723FABED3000C7FA2 /* main.cpp */,
+				9D64FDBA2405E67500266C66 /* App.h */,
+				9D76669B2405B9F1007B8922 /* executor.cpp */,
+				9D76669C2405B9F1007B8922 /* executor.hpp */,
 				9D74E17E23FABEDC000C7FA2 /* db.h */,
 				9D74E17F23FAC0AB000C7FA2 /* parser.h */,
 				9D74E18023FAC1FA000C7FA2 /* engine.h */,
@@ -103,6 +116,9 @@
 				9D76668C23FFEC21007B8922 /* server.h */,
 				9D7666902402AA37007B8922 /* json.h */,
 				9D7666912402AFD6007B8922 /* json-imp.cpp */,
+				9D7666962405A51A007B8922 /* jsondb.h */,
+				9D7666972405A58E007B8922 /* codegen.cpp */,
+				9D7666982405A58E007B8922 /* codegen.hpp */,
 			);
 			path = "mini-sql";
 			sourceTree = "<group>";
@@ -174,8 +190,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				9D7666922402AFD6007B8922 /* json-imp.cpp in Sources */,
+				9D7666992405A58E007B8922 /* codegen.cpp in Sources */,
 				9D69257E23FACE4400FC78CC /* parser.cpp in Sources */,
 				9D74E17823FABED3000C7FA2 /* main.cpp in Sources */,
+				9D76669D2405B9F1007B8922 /* executor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

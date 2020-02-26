@@ -25,7 +25,7 @@
 
 static const char * okhdr = "HTTP/1.1 200 OK\r\nContent-length:";
 static const char * okbody = "\r\nContent-Type: %s\r\nConnection: close\r\n\r\n";
-static const char * statdir = "";
+static const char * statdir = "/svelte-app/public";
 
 
 class Server{
@@ -146,9 +146,10 @@ class Server{
         char path [2048];
         sscanf(rdbuf, "%s%s", type, path);
         char * path_wo_params = strtok(path, "?");
-        if(strstr(path_wo_params, "/static/") == path_wo_params){
-            char strbuf [200];
-            sprintf(strbuf, "%s%s", statdir, path_wo_params);
+        if(strstr(path_wo_params, ".") != 0){
+            char strbuf [2000];
+            char * fname = strchr(path_wo_params, '/');
+            sprintf(strbuf, "%s%s", statdir, fname);
             FILE * f = fopen(strbuf + 1, "r");
             fseek(f, 0, SEEK_END);
             long len = ftell(f);
