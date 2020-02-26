@@ -9,6 +9,13 @@ git clone http://github.com/DulangDev/PonasenkovQL
 `
 будет создана папка с файлами, просто собираете и запускаете
 
+- как работать с фронтендом
+```
+cd svelte-app
+npm install
+npm run build
+```
+
 **получить обновления**
 
 `git pull` в папке проекта (то есть PonasenkovQL)
