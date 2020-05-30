@@ -257,7 +257,7 @@ public:
                 conn.write_answer("requested url was not found");
             } else {
                 auto f = router[conn.get_path()];
-                f(conn);
+                std::async([&]{f(conn);});
                 
             }
         }while(1);
