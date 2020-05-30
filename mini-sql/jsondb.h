@@ -15,12 +15,16 @@
 #include <sstream>
 #include "parser.h"
 #include <fstream>
+#include <shared_mutex>
 #include <sys/stat.h>
 #include "executor.hpp"
 class JsonDB{
     //the root array of records
     json collection;
     std::mutex bu_mux;
+    
+    std::shared_mutex wr;
+    
     void backup()  {
         //executes at background thread
         std::async([&](){
@@ -40,7 +44,10 @@ class JsonDB{
         if(query){
             std::stringstream ss;
             CodeGen::frame frame = CodeGen::generate(query);
+            frame.print();
+            wr.lock_shared();
             std::vector<int> res = execute_on_collection(collection, frame);
+            wr.unlock_shared();
             ss << "[";
             if(res.size() >= 1){
                 ss << collection[res[0]];
@@ -70,7 +77,9 @@ public:
             if((long)body != 1){
                 json doc = Parser::parse_json(body);
                 doc["_id"] = rand() % int(1e7);
+                wr.lock();
                 insert(doc);
+                wr.unlock();
                 return "ok";
             }
            

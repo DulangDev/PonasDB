@@ -10,20 +10,24 @@
 #define App_h
 #include "jsondb.h"
 #include "server.h"
+#include <map>
 class App{
     JsonDB db;
     Server serv;
+    
 public:
+    JsonDB& getDB() {
+        return db;
+    }
+
+    void route( const char * path,Server::handler h ){
+        serv.route(path, h);
+    }
     App():db(), serv(9000){
        
     }
     void launch(){
-        do{
-            typename Server::Connection c = serv.connect();
-            const char * q = c.get_query();
-            std::string res = db.execute_query(q);
-            c.write_answer(res.c_str());
-        } while(1);
+        serv.serve();
     }
     
 };

@@ -12,6 +12,7 @@
 		9D7666922402AFD6007B8922 /* json-imp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7666912402AFD6007B8922 /* json-imp.cpp */; };
 		9D7666992405A58E007B8922 /* codegen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D7666972405A58E007B8922 /* codegen.cpp */; };
 		9D76669D2405B9F1007B8922 /* executor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D76669B2405B9F1007B8922 /* executor.cpp */; };
+		9DF80668248185BA00B274C0 /* Asmify.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9DF80666248185BA00B274C0 /* Asmify.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -50,6 +51,9 @@
 		9D76669A2405B3B6007B8922 /* test_parser_res0 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test_parser_res0; sourceTree = "<group>"; };
 		9D76669B2405B9F1007B8922 /* executor.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = executor.cpp; sourceTree = "<group>"; };
 		9D76669C2405B9F1007B8922 /* executor.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = executor.hpp; sourceTree = "<group>"; };
+		9DE5F2DB2410CDB100C46AEF /* dbcache.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = dbcache.json; sourceTree = "<group>"; };
+		9DF80666248185BA00B274C0 /* Asmify.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Asmify.cpp; sourceTree = "<group>"; };
+		9DF80667248185BA00B274C0 /* Asmify.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Asmify.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +105,7 @@
 		9D74E17623FABED3000C7FA2 /* mini-sql */ = {
 			isa = PBXGroup;
 			children = (
+				9DE5F2DB2410CDB100C46AEF /* dbcache.json */,
 				9D76669A2405B3B6007B8922 /* test_parser_res0 */,
 				9D76668E23FFF65F007B8922 /* static */,
 				9D69257F23FAD44500FC78CC /* tests */,
@@ -119,6 +124,8 @@
 				9D7666962405A51A007B8922 /* jsondb.h */,
 				9D7666972405A58E007B8922 /* codegen.cpp */,
 				9D7666982405A58E007B8922 /* codegen.hpp */,
+				9DF80666248185BA00B274C0 /* Asmify.cpp */,
+				9DF80667248185BA00B274C0 /* Asmify.hpp */,
 			);
 			path = "mini-sql";
 			sourceTree = "<group>";
@@ -191,6 +198,7 @@
 			files = (
 				9D7666922402AFD6007B8922 /* json-imp.cpp in Sources */,
 				9D7666992405A58E007B8922 /* codegen.cpp in Sources */,
+				9DF80668248185BA00B274C0 /* Asmify.cpp in Sources */,
 				9D69257E23FACE4400FC78CC /* parser.cpp in Sources */,
 				9D74E17823FABED3000C7FA2 /* main.cpp in Sources */,
 				9D76669D2405B9F1007B8922 /* executor.cpp in Sources */,
@@ -206,7 +214,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
@@ -264,7 +272,7 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LANGUAGE_STANDARD = "c++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;

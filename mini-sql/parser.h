@@ -32,7 +32,12 @@ static const char * lexems [] = {
     "true",
     "false",
     ".",
-    "in"
+    "in",
+    "+",
+    "-",
+    "=",
+    "*",
+    "/"
 };
 class Parser{
     
@@ -152,6 +157,11 @@ public:
         _false,
         dot,
         kwin,
+        plus,
+        minus,
+        assign,
+        mult,
+        div,
         strlit,
         numlit,
         name,

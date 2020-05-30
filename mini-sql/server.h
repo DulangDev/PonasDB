@@ -22,7 +22,9 @@
 #include <netdb.h>  /* Needed for getaddrinfo() and freeaddrinfo() */
 #include <unistd.h> /* Needed for close() */
 #endif
-
+#include <map>
+#include <functional>
+#include <future>
 static const char * okhdr = "HTTP/1.1 200 OK\r\nContent-length:";
 static const char * okbody = "\r\nContent-Type: %s\r\nConnection: close\r\n\r\n";
 static const char * statdir = "/svelte-app/public";
@@ -30,22 +32,49 @@ static const char * statdir = "/svelte-app/public";
 
 class Server{
     int sockfd;
-   public:
+public:
+    class Connection;
+    
+    
+    
+    struct scope_vars{};
+    template<typename T>
+    struct _sv:public scope_vars{
+        T members;
+    };
+    
+    
+    
+    class _handler{
+        virtual void operator()(Connection & conn) = 0;
+    };
+    using handler = std::function<void(Connection&)>;
+private:
+    
+    
+    
+    std::map<std::string, handler> router;
+public:
+
+    void route(const char * path, handler hdl){
+        router[path] = hdl;
+    }
     class Connection {
         int clfd;
         char rdbuf [2048];
+        char path [100];
     public:
-        Connection(int cl, const char * src = 0){
+        Connection(int cl, const char * src = 0, const char * path = "/"){
             clfd = cl;
+            strcpy(this->path, path);
             if(src){
                 strcpy(rdbuf, src);
             }
         }
+        const char * get_path() const {
+            return path;
+        }
         const char * get_query() {
-            int bread = 0;
-            int read = 1;
-            
-            
             char encoded [2048];
             char * writer = encoded;
             for(char * rdr = rdbuf; *rdr != 0; ++rdr){
@@ -83,8 +112,41 @@ class Server{
                     *writer ++ = *rdr;
                 }
             }
+            *writer = 0;
             strcpy(rdbuf, encoded);
             return rdbuf;
+        }
+        void send_file( const char * fname ){
+            char strbuf [2000];
+            sprintf(strbuf, "%s/%s", statdir, fname);
+            FILE * f = fopen(strbuf + 1, "r");
+            fseek(f, 0, SEEK_END);
+            long len = ftell(f);
+            rewind(f);
+            write(clfd, okhdr, strlen(okhdr));
+            char clen [10];
+            char bodybuf [100];
+            char * ext = strchr(strbuf, '.') + 1;
+            const char * mime = "text/html";
+            if(strcmp(ext, "js")==0){
+                mime = "application/javascript";
+            }
+            if(strcmp(ext, "css")==0){
+                mime = "text/css";
+            }
+            if(strcmp(ext, "svg")==0){
+                mime = "image/svg+xml";
+            }
+            sprintf(bodybuf, okbody, mime);
+            sprintf(clen, "%lu", len);
+            write(clfd, clen, strlen(clen));
+            write(clfd, bodybuf, strlen(bodybuf));
+            char *rdbuf_ = (char*)malloc(len);
+            fread(rdbuf_, len, 1, f);
+            write(clfd, rdbuf_, len);
+            free(rdbuf_);
+            fclose(f);
+            close(clfd);
         }
         
         void write_answer( const char * answer ){
@@ -151,6 +213,11 @@ class Server{
             char * fname = strchr(path_wo_params, '/');
             sprintf(strbuf, "%s%s", statdir, fname);
             FILE * f = fopen(strbuf + 1, "r");
+            if(!f){
+                const char * err404 = "HTTP/1.1 404";
+                write(clfd, err404, sizeof(err404));
+                goto cl_connect;
+            }
             fseek(f, 0, SEEK_END);
             long len = ftell(f);
             rewind(f);
@@ -180,7 +247,20 @@ class Server{
             close(clfd);
             goto cl_connect;
         }
-        return Connection(clfd, strtok(0, "\r\n"));
+        return Connection(clfd, strtok(0, "\r\n"), path_wo_params);
+    }
+    
+    void serve(){
+        do{
+            Connection conn = connect();
+            if( router.find(conn.get_path()) == router.end() ){
+                conn.write_answer("requested url was not found");
+            } else {
+                auto f = router[conn.get_path()];
+                f(conn);
+                
+            }
+        }while(1);
     }
     
     

@@ -184,6 +184,10 @@ public:
         return *(double*)&inher_val;
     }
     
+    operator long() const{
+        return (double)(*this);
+    }
+    
     const char * c_str() const {
         if(type != string){
             err new_err;

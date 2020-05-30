@@ -35,7 +35,7 @@ Parser::astnode * Parser::parse_expr(lwalker &walker){
     astnode* left = parse_logor(walker);
     if( (*walker).type == or_lex ){
         walker ++;
-        astnode * right = parse_lognot(walker);
+        astnode * right = parse_logor(walker);
         if(! right)
             return 0;
         return create_node(Parser::asttype::OR, 2, left, right);

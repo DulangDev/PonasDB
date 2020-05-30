@@ -7,6 +7,7 @@
 //
 #define ic_enable 0
 #include "executor.hpp"
+#include "Asmify.hpp"
 
 std::vector<int> execute_on_collection( const json & coll, CodeGen::frame & frame );
 void test_execution(){
@@ -22,8 +23,14 @@ std::vector<int> execute_on_collection( const json & coll, CodeGen::frame & fram
     //coll is guaranteed an array
     std::vector<int> results;
     clock_t t = clock();
+    AsmWriter wr;
+    wr.writeFrame(frame);
+    AsmWriter::executable f = wr.goExec();
+    //wr.print();
+    
     for(int i = 0; i < coll.length(); i++){
-        if( execute_on_object(coll[i], frame) )
+        json * obj = const_cast<json*>(&(coll[i]));
+        if( f(frame.stack, obj) )
             results.push_back(i);
     }
     std::cout << "executed " << coll.length() << " entries in " << (double)(clock() - t)/CLOCKS_PER_SEC << "\n";
@@ -32,6 +39,7 @@ std::vector<int> execute_on_collection( const json & coll, CodeGen::frame & fram
 
 
 bool execute_on_object(const json & object, CodeGen::frame & frame){
+#if 0
     void ** stackptr = frame.stack;
     bzero(frame.stack, sizeof(frame.stack));
     for( auto & op: frame.operands ){
@@ -107,9 +115,7 @@ bool execute_on_object(const json & object, CodeGen::frame & frame){
                     }
                     const char * rhs = (const char*)frame.statics[op.arg];
                     result = &(*var)[rhs];
-#if ic_enable
-                    op.i_cache[0] = (long)const_cast<json*>(result);
-#endif
+
                 }
                 *stackptr++ = const_cast<json*>(result);
             }break;
@@ -120,5 +126,12 @@ bool execute_on_object(const json & object, CodeGen::frame & frame){
                 break;
         }
     }
+#endif
+    AsmWriter writer;
+    writer.writeFrame(frame);
+    AsmWriter::executable f = writer.goExec();
+    json & j = const_cast<json&>(object);
+    return f(frame.stack, &j);
+    
     return false;
 }

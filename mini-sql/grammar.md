@@ -2,7 +2,8 @@
 
 select <expr>
 
-<expr> ::== <logand> || <logand> "or" <logand>
+<expr> ::== <logor> || <logor> "or" <logor>
+<logor> ::== <logand> || <logand> "and" <logand>
 <logand> ::== <lognot> || "not " <lognot>
 <lognot> ::== <symbol> { "==" || "<" || ">" } <value> || "(" <expr> ")"
 <symbol> ::== <symbol>.<string> || <name>

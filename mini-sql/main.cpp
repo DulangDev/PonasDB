@@ -39,7 +39,7 @@ static void test_parser(){
 
 
 static void stress_test() {
-    engine eng(DB());
+    engine eng((DB()));
     FILE * in = fopen("tests/source/stress_test", "r");
     FILE * out = fopen("log.out", "w");
     engine(DB()).startEngine(fileno(in), fileno(out));
@@ -67,7 +67,15 @@ int main(int argc, const char * argv[]) {
 #else
     
 #endif
-    App().launch();
+    App app;
+    app.route("/", [](auto& conn){
+        conn.send_file("index.html");
+    });
+    app.route("/query", [&](auto& conn){
+        auto query_result = app.getDB().execute_query(conn.get_query());
+        conn.write_answer(query_result.c_str());
+    });
+    app.launch();
     
     //eng.startEngine(0, 1);
     

@@ -4,7 +4,7 @@
     let query= "";
 	let result = [];
 	function get_results(){
-		fetch(`/?${type} ${query}`).then( r=> r.json() ).then((r)=>{
+		fetch(`/query?${type} ${query}`).then( r=> r.json() ).then((r)=>{
             result = r;
         })
 	}
@@ -43,6 +43,7 @@ select{
         <select bind:value={type}>
             <option>select</option>
             <option>insert</option>
+            <option>update</option>
         </select>
         <input id="inp" bind:value={query}/>
         <div id="search" on:click={get_results}>{type}</div>
